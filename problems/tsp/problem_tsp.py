@@ -70,6 +70,8 @@ class TSP(object):
             TSP tour length, None
         """
         # Check that tours are valid, i.e. contain 0 to n -1
+        #print(pi.shape)
+        #print(pi)
         assert (
             torch.arange(pi.size(1), out=pi.data.new()).view(1, -1).expand_as(pi) ==
             pi.data.sort(1)[0]

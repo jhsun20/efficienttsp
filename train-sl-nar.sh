@@ -12,18 +12,18 @@ MAX_SIZE=50
 NEIGHBORS=0.2
 KNN_STRAT="percentage"
 
-TRAIN_DATASET="data/tsp/tsp20-50_train_concorde.txt"
+TRAIN_DATASET="data/tsp/tsp20_train_concorde.txt"
 VAL_DATASET1="data/tsp/tsp20_test_concorde.txt"
 VAL_DATASET2="data/tsp/tsp50_test_concorde.txt"
-# VAL_DATASET3="data/tsp/tsp100_test_concorde.txt"
+#VAL_DATASET3="data/tsp/tsp100_test_concorde.txt"
 
 N_EPOCHS=10
-EPOCH_SIZE=1280000
-BATCH_SIZE=128
+EPOCH_SIZE=100000
+BATCH_SIZE=1000
 ACCUMULATION_STEPS=1
 
-VAL_SIZE=1280
-ROLLOUT_SIZE=1280
+VAL_SIZE=10000
+ROLLOUT_SIZE=1000
 
 MODEL="nar"
 ENCODER="gnn"
@@ -31,11 +31,11 @@ AGGREGATION="max"
 AGGREGATION_GRAPH="mean"
 NORMALIZATION="batch"
 EMBEDDING_DIM=128
-N_ENCODE_LAYERS=4
+N_ENCODE_LAYERS=8
 
 LR_MODEL=0.0001
 MAX_NORM=1
-CHECKPOINT_EPOCHS=0
+CHECKPOINT_EPOCHS=1
 
 CUDA_VISIBLE_DEVICES="$DEVICES" python run.py --problem "$PROBLEM" \
     --model "$MODEL" \

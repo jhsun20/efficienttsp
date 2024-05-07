@@ -57,6 +57,7 @@ class BatchBeam(NamedTuple):
     Since the beam size of different entries in the batch may vary, the tensors are not (batch_size, beam_size, ...)
     but rather (sum_i beam_size_i, ...), i.e. flattened. This makes some operations a bit cumbersome.
     """
+
     score: torch.Tensor  # Current heuristic score of each entry in beam (used to select most promising)
     state: None  # To track the state
     parent: torch.Tensor
@@ -78,7 +79,7 @@ class BatchBeam(NamedTuple):
                 parent=self.parent[key] if self.parent is not None else None,
                 action=self.action[key] if self.action is not None else None
             )
-        return super(BatchBeam, self).__getitem__(key)
+        return self[key]
 
     # Do not use __len__ since this is used by namedtuple internally and should be number of fields
     # def __len__(self):
@@ -218,4 +219,5 @@ class CachedLookup(object):
 
             return self.current
 
-        return super(CachedLookup, self).__getitem__(key)
+        return self[key]
+

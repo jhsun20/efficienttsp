@@ -71,19 +71,29 @@ class Beamsearch(object):
         beam_lk = beam_lk.view(self.batch_size, -1)  # (batch_size, beam_size * num_nodes)
         # Get top k scores and indexes (k = beam_size)
         bestScores, bestScoresId = beam_lk.topk(self.beam_size, 1, True, True)
+        #print("bestScoresId")
+        #print(bestScoresId)
         # Update scores
         self.scores = bestScores
         # Update backpointers
         prev_k = bestScoresId / self.num_nodes
         self.prev_Ks.append(prev_k)
         # Update outputs
-        new_nodes = bestScoresId - prev_k * self.num_nodes
+        new_nodes = bestScoresId
         self.next_nodes.append(new_nodes)
         # Re-index mask
-        perm_mask = prev_k.unsqueeze(2).expand_as(self.mask)  # (batch_size, beam_size, num_nodes)
-        self.mask = self.mask.gather(1, perm_mask)
+        perm_mask = bestScoresId.unsqueeze(2).expand_as(self.mask)  # (batch_size, beam_size, num_nodes)
+        #print('perm mask')
+        #print(perm_mask.shape)
+        #print(perm_mask)
+        #self.mask = self.mask.gather(2, perm_mask)
+        #print('mask before')
+        #torch.set_printoptions(threshold=10_000)
+        #print(self.mask)
         # Mask newly added nodes
         self.update_mask(new_nodes)
+        #print('mask after')
+        #print(self.mask)
 
     def update_mask(self, new_nodes):
         """Sets new_nodes to zero in mask.
@@ -117,6 +127,7 @@ class Beamsearch(object):
         k = k.type(torch.long).to(self.device)
         hyp = -1 * torch.ones(self.batch_size, self.num_nodes, dtype=torch.long).to(self.device)
         for j in range(len(self.prev_Ks) - 1, -2, -1):
+            k = k.type(torch.int64)
             hyp[:, j + 1] = self.next_nodes[j + 1].gather(1, k).view(1, self.batch_size)
             k = self.prev_Ks[j].gather(1, k)
         return hyp

@@ -123,7 +123,7 @@ def train_epoch(model, optimizer, baseline, lr_scheduler, epoch, val_datasets, p
 
         step += 1
     
-    lr_scheduler.step(epoch)
+    lr_scheduler.step()
 
     epoch_duration = time.time() - start_time
     print("Finished epoch {}, took {} s".format(epoch, time.strftime('%H:%M:%S', time.gmtime(epoch_duration))))
@@ -222,7 +222,7 @@ def train_epoch_sl(model, optimizer, lr_scheduler, epoch, train_dataset, val_dat
 
         step += 1
     
-    lr_scheduler.step(epoch)
+    lr_scheduler.step()
 
     epoch_duration = time.time() - start_time
     print("Finished epoch {}, took {} s".format(epoch, time.strftime('%H:%M:%S', time.gmtime(epoch_duration))))
